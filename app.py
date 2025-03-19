@@ -6,7 +6,7 @@ import humanize
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = 'blog-project'  #sessions
+app.secret_key = 'blog-project'  #session
 
 #database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:pr0xy@localhost/blog'
@@ -153,7 +153,7 @@ def logout():
 @app.route("/profile")
 def profile():
     if 'user_id' not in session:
-        return redirect(url_for("login"))  #if not logged in
+        return redirect(url_for("login"))
 
     user_id = session['user_id']
     user = User.query.get(user_id)
