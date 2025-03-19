@@ -1,0 +1,48 @@
+render_template in Flask is used to render HTML templates.
+Rendering an HTML template means dynamically generating an HTML page with dynamic data using a templating engine(Jinja2)
+
+request--> Handles HTTP request data(form submission)
+
+url_for-->Generates dynamic URLs for different Flask routes
+
+A session in Flask is used to store data across multiple requests for a specific user. It keeps user-specific information
+
+SQLAlchemy is a Python library used for interacting with databases.
+
+werkzeug.security-->Encrypts and verifies passwords.
+
+app = Flask(__name__)--> Creates a Flask application instance. tells flask this is main application
+__name__--> It helps Flask locate templates, static files, and routes correctly.
+
+access flask's jinja2 env filter-->assign new filter named humanize-->uses humaize lib's naturaltime()
+
+defiles a model/table in database
+
+sets default val for new recs-->gets current utc time without timezone -->manually attaches utc timezone using pytz
+
+establishes foreign key relation with user.id
+cascading deletes related recs when parent is deleted
+
+relationship with post and user table eg get username of post's author get all posts of the author
+
+if created_at has to no timezone manually attaches utc timezone else use as it is
+
+@app.route("/") binds fx home() to root url(/)
+
+signup allows both get and post request
+get--> show signup form post-->process form submission
+if request.method == "POST": --> check if form was submitted
+new_user--> creates new user object is user model
+commits--> confirms changes making user permanent
+
+session[user_id] and nxt line stores in session so they remain logged in or ccreates session for new users
+return render_template("signup.html")--> if user visits singup directly(not submitting form) signup form is displayed
+basically page relods if user enters wrong input like double email etc
+
+username = request.form['username'] -->gets entered username
+user = User.query.filter_by(username=username).first()--> checks if user entered exists in db
+
+local_timezone = pytz.timezone("Asia/Kolkata")--> retrieves timezone for kolkata
+nxt line gets current time in kolkata timezone
+converts to utc
+user_id_session-->links post to currently logged in user
