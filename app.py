@@ -6,11 +6,10 @@ import humanize
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  #sessions
+app.secret_key = 'blog-project'  #sessions
 
 #database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:pr0xy@localhost/blog'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  #disable modif tracking
 db = SQLAlchemy(app)
 
 #reg humanize filter for Jinja2
