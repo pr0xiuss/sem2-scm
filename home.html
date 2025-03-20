@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Homepage</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="home_csss.css">
 </head>
 <body>
 
     <div class="header">
         <h2>Welcome {{ username }}!</h2>
         <div class="header-right">
-            <a href="{{ url_for('profile') }}" class="profile-icon">👤</a>
+            <a href="{{ url_for('profile') }}" class="profile-icon">👤Profile       </a>
             <a href="{{ url_for('logout') }}" class="logout-btn">🚪 Logout</a>
         </div>
     </div>
