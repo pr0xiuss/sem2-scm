@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ post.title }}</h1>
+        <p><strong>Author:</strong> {{ post.user.username }}</p>
+        <p><strong>Published:</strong> {{ post.created_at|humanize }}</p>
+        <hr>
+        <!--newlines to <br>-->
+        <p>{{ post.content|replace('\n', '<br>')|safe }}</p>  <!--preserve line breaks-->
+        <br>
+        <a href="{{ url_for('home') }}" class="home-btn">🏠 Home</a>
+    </div>
+</body>
+</html>
