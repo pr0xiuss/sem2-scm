@@ -1,0 +1,182 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+/* Header containing welcome message and logout button */
+.header {
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 30px;
+}
+
+/* Profile Header Styling */
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Profile Actions Styling */
+.profile-actions {
+    display: flex;
+    align-items: center;
+    gap: 30px;  /* Space between the buttons */
+
+}
+
+/* Logout Button */
+.logout-btn {
+    background-color: #dc3545; /* Red color */
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+
+/* Home Button */
+.home-btn {
+    background-color: #007bff; /* Blue color */
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.home-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Blog Post Cards */
+.post {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: white;
+    border-radius: 5px;
+    position: relative;
+    transition: 0.3s;
+}
+
+.post:hover {
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.username {
+    font-weight: bold;
+    color: gray;
+}
+
+.post-title {
+    font-size: 20px;
+    margin: 5px 0;
+}
+
+.post-preview {
+    color: black;
+}
+
+.read-more {
+    background: green;
+    color: white;
+    padding: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+/* Full-Screen Overlay */
+.overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Translucent background */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal (Full Post) */
+.modal {
+    background: white;
+    padding: 20px;
+    width: 60%;
+    max-height: 80%;
+    overflow-y: auto;
+    border-radius: 10px;
+    position: relative;
+}
+
+/* Close Button */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Comment Button */
+.comment-btn {
+    background: orange;
+    color: white;
+    padding: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+/* Create Button */
+.create-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.create-btn:hover {
+    background-color: #218838;
+}
+
+/* No Posts Message */
+.no-posts {
+    font-size: 16px;
+    color: gray;
+    margin-top: 20px;
+}
+
+/* Header Right Section */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 30px;  /* Add space between profile icon and logout button */
+}
+
+.new {
+     margin-top: 5px;
+}
+
+.recent{
+    margin-top: 60px;
+}
+
+.profile-create{
+    margin-top: 100px;
+}

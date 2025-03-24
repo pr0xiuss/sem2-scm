@@ -6,10 +6,10 @@ import humanize
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = 'blog-project'  #session
+app.secret_key = 'blog-project'  #sessions
 
 #database config
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:pr0xy@localhost/blog'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:pr0xius@localhost/blog'
 db = SQLAlchemy(app)
 
 #reg humanize filter for Jinja2
@@ -153,7 +153,7 @@ def logout():
 @app.route("/profile")
 def profile():
     if 'user_id' not in session:
-        return redirect(url_for("login"))
+        return redirect(url_for("login"))  #if not logged in
 
     user_id = session['user_id']
     user = User.query.get(user_id)
