@@ -120,7 +120,7 @@
             align-items: center;
             opacity: 0;
             transform: translateX(100%);
-            transition: all 0.8s ease;
+            transition: all 0.7s ease;
         }
 
         .features-section.visible {
@@ -184,7 +184,7 @@
             align-items: center;
             opacity: 0;
             transform: translateX(100%);
-            transition: all 0.8s ease;
+            transition: all 0.9s ease-in;
         }
 
         .about-section.visible {
@@ -339,7 +339,7 @@
             </p>
         </div>
         <div class="image-container">
-            <img src="./˚⭑· ͟͟͞͞➳ ᴬⁱ ᴬʳᵗ.jpg" alt="Blog Image">
+            <img src="./1st home.png" alt="Blog Image">
         </div>
     </section>
 
@@ -347,17 +347,17 @@
         <h2>Our Features</h2>
         <div class="features-grid">
             <div class="feature-card">
-                <img src="https://via.placeholder.com/300x150" alt="Feature 1">
+                <img src="./creative blog.jpg" alt="Feature 1">
                 <h3>Creative Blogging</h3>
                 <p>Share your unique stories and ideas with a global audience through our intuitive blogging platform.</p>
             </div>
             <div class="feature-card">
-                <img src="https://via.placeholder.com/300x150" alt="Feature 2">
+                <img src="./community puls.png" alt="Feature 2">
                 <h3>Community Engagement</h3>
                 <p>Connect with like-minded creatives, comment on posts, and build a community around your passions.</p>
             </div>
             <div class="feature-card">
-                <img src="./˚⭑· ͟͟͞͞➳ ᴬⁱ ᴬʳᵗ.jpg" alt="Feature 3">
+                <img src="./edit profile.png" alt="Feature 3">
                 <h3>Customizable Profiles</h3>
                 <p>Personalize your profile to reflect your style and showcase your best work to the world.</p>
             </div>
@@ -400,7 +400,7 @@
 
             sections.forEach(section => {
                 const sectionTop = section.getBoundingClientRect().top;
-                if (sectionTop < windowHeight * 0.8) {
+                if (sectionTop >=windowHeight * 0.6) {
                     section.classList.add('visible');
                 }
             });
