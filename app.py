@@ -45,6 +45,13 @@ with app.app_context():
 
 #route for home
 @app.route("/")
+@app.route('/newhome')  # This route will serve newhome.html as the first page
+def newhome():
+    return render_template("newhome.html")
+
+
+
+@app.route("/home")
 def home():
     #keep the session clearing to avoid logging out on each request
     if 'user_id' not in session:
@@ -52,7 +59,6 @@ def home():
 
     posts = Post.query.all()  #fetch all posts
     return render_template("home.html", username=session.get('username'), posts=posts)
-
 
 
 #route for signup
@@ -148,7 +154,7 @@ def logout():
     session.pop('user_id', None)
     session.pop('username', None)
     flash('Logged out successfully!', 'success')
-    return redirect(url_for("login"))
+    return redirect(url_for("newhome"))
 
 @app.route("/profile")
 def profile():
