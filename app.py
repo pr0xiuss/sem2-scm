@@ -43,9 +43,9 @@ class Post(db.Model):
 with app.app_context():
     db.create_all()
 
-#route for home
+#route for newhome
 @app.route("/")
-@app.route('/newhome')  # This route will serve newhome.html as the first page
+@app.route('/newhome')  
 def newhome():
     return render_template("newhome.html")
 
@@ -53,7 +53,6 @@ def newhome():
 
 @app.route("/home")
 def home():
-    #keep the session clearing to avoid logging out on each request
     if 'user_id' not in session:
         return redirect(url_for("login"))  #to login if not authenticated
 
