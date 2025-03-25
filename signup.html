@@ -4,11 +4,155 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="signup_login_css2.css" />
+    <style>
+        /* Body styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #efffba;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+            position: relative; /* For absolute positioning of top-left back arrow */
+        }
 
+        /* Heading */
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 40px;
+        }
+
+        /* Form styling */
+        form {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #fff;
+            color: #333;
+            outline: none;
+            resize: none;
+            box-sizing: border-box;
+            max-width: 100%;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #888;
+        }
+
+        textarea {
+            height: 120px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        /* Submit button */
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #8db600;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #7a9a01;
+        }
+
+        /* Back link below form */
+        .back-btn {
+            display: block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #8db600;
+            font-weight: bold;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+            color: #7a9a01;
+        }
+
+        /* Top-left back arrow styled as a button */
+        .top-back-arrow {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-decoration: none;
+            color: #333;
+            font-size: 28px;
+            font-weight: bold;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background-color: #fff; /* White background */
+            border: 2px solid #8db600; /* Green border */
+            padding: 8px 12px; /* Padding to make it button-like */
+            border-radius: 6px; /* Rounded corners */
+            cursor: pointer; /* Hand cursor on hover */
+        }
+
+        .top-back-arrow:hover {
+            color: #fff; /* White text on hover */
+            background-color: #8db600; /* Green background on hover */
+            border-color: #7a9a01; /* Slightly darker border on hover */
+        }
+
+        /* Home button (kept for consistency, not used here) */
+        .home-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .home-btn:hover {
+            background-color: #0056b3;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
+
+    <!-- Top-left back arrow button -->
+    <a href="{{ url_for('home') }}" class="top-back-arrow">← BACK</a>
 
     <h2>Create a New Account</h2>
 
@@ -31,6 +175,7 @@
         <button type="submit" class="submit-btn">Sign Up</button>
     </form>
 
+    <!-- Original back link below form -->
     <a href="{{ url_for('login') }}" class="back-btn">Already have an account? Log in</a>
 
 </body>
