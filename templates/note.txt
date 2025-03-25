@@ -1,0 +1,34 @@
+render_template--> used to render html template. Dynamically generating html page with dynamic data using
+templating engine(Jinja2) 
+
+request--> handles HTTP request data (form submission,query parameter)
+
+route-->its a url pattern that maps to a specific function. user visits that url and flask runs that function
+
+url_for--> generate dynamic urls for different flask routes
+
+session-->used to store data across multiple requests for specific user. keeps user logged in
+
+pytz--> handles timezone handling conversion bw different timezone
+
+db--> initialize SQLAlchmemy so we can interact with database using python
+
+access flask's jinja2 env filter--> initialize new filter named humanize--> uses humanize lib naturaltime()
+
+model-->representation of table in database
+
+__repr__--> method defines how object is representated as string when printed\
+
+created_at-->adds timestamps to records in db table storing utc time was rec was created
+utcnow()-->returns current utc time without timezone
+.replace-->returns utc time with timezone
+
+post user_id-->define foreign key column in db table linking it to id column in user table (establishing foreign key relationship to user.id)
+
+relation--> creates rela..ship bw 2 tables user and posts (gets username of post's author and get all posts by that user)
+
+is None--> if created_at has no timezone info we manually attach utc timezone 
+
+app_context--> temp env that holds info about current running app flask needs to know which app is currently active
+
+db.create_all()--> creates all tables in db.model classes
