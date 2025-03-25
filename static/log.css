@@ -13,11 +13,7 @@ body {
 h2 {
     color: #333;
     margin-bottom: 20px;
-<<<<<<< HEAD
-    font-size: 40px;    
-=======
     font-size: 40px;
->>>>>>> feature_ns
 }
 
 form {
@@ -25,43 +21,25 @@ form {
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-<<<<<<< HEAD
-    width: 350px;
-    text-align: center;
-    overflow: hidden;
-=======
     width: 320px;
     text-align: center;
     padding-right: 50px;
->>>>>>> feature_ns
 }
 
 .form-group {
     margin-bottom: 15px;
     text-align: left;
-<<<<<<< HEAD
-    position: relative;
-=======
->>>>>>> feature_ns
 }
 
 label {
     display: block;
     margin-bottom: 5px;
-<<<<<<< HEAD
-    color: #333;
-    font-weight: bold;
-}
-
-input, textarea {
-=======
     color: #444444;
     font-weight: bold;
     font-size: 16px;
 }
 
 input {
->>>>>>> feature_ns
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -69,30 +47,12 @@ input {
     background: #fff;
     color: #333;
     outline: none;
-<<<<<<< HEAD
-    resize: none;
-    box-sizing: border-box;
-    max-width: 100%;
-}
-
-input::placeholder, textarea::placeholder {
-    color: #888;
-}
-
-textarea {
-    height: 120px;
-    max-height: 150px;
-    overflow-y: auto;
-}
-
-=======
 }
 
 input::placeholder {
     color: #888;
 }
 
->>>>>>> feature_ns
 .submit-btn {
     width: 100%;
     padding: 12px;
@@ -109,41 +69,16 @@ input::placeholder {
     background: #7a9a01;
 }
 
-<<<<<<< HEAD
-.back-btn, .home-btn {
-=======
 .back-btn {
->>>>>>> feature_ns
     display: block;
     margin-top: 15px;
     text-decoration: none;
     color: #8db600;
     font-weight: bold;
     transition: 0.3s;
-<<<<<<< HEAD
-    text-align: center;
-}
-
-.back-btn:hover, .home-btn:hover {
-    text-decoration: underline;
-    color: #7a9a01;
-}
-.home-btn {
-    background-color: #007bff; /* Blue color */
-    color: white;
-    padding: 8px 15px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-.home-btn:hover {
-    background-color: #0056b3;
-=======
 }
 
 .back-btn:hover {
     text-decoration: underline;
     color: #7a9a01;
->>>>>>> feature_ns
 }
