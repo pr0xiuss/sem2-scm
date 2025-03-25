@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogview</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #b0bec5; /* Light teal background */
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header Section */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #b0bec5;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInDown 1s ease forwards;
+        }
+
+        .title {
+            font-size: 36px;
+            color: white;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .title:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-bar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 18px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-bar a:hover {
+            color: #ffeb3b; /* Yellow on hover */
+            transform: scale(1.1);
+        }
+
+        .nav-bar a.login {
+            color: black;
+            font-weight: bold;
+        }
+
+        .nav-bar a.login:hover {
+            color: #ffeb3b;
+        }
+
+        /* Main Section */
+        .main-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 50px;
+            min-height: 80vh;
+            background-color: #b0bec5;
+        }
+
+        .content {
+            max-width: 50%;
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideInLeft 1s ease 0.5s forwards;
+        }
+
+        .content p {
+            color: white;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .tagline {
+            font-size: 36px;
+            color: #ffeb3b; /* Yellow tagline */
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .image-container {
+            max-width: 45%;
+            opacity: 0;
+            transform: translateX(50px);
+            animation: slideInRight 1s ease 0.5s forwards;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 50px;
+            background-color: #e0e8eb; /* Slightly lighter teal for contrast */
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.7s ease;
+        }
+
+        .features-section.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .features-section h2 {
+            font-size: 36px;
+            color: #ffeb3b;
+            margin-bottom: 40px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .feature-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            color: #2e7d32; /* Green for headings */
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 16px;
+            color: #333;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 50px;
+            background-color: #b0bec5;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.9s ease-in;
+        }
+
+        .about-section.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .about-section h2 {
+            font-size: 36px;
+            color: #ffeb3b;
+            margin-bottom: 40px;
+        }
+
+        .about-content {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .about-content p {
+            color: white;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 50px;
+            background-color: #e0e8eb;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.8s ease;
+        }
+
+        .contact-section.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .contact-section h2 {
+            font-size: 36px;
+            color: #ffeb3b;
+            margin-bottom: 40px;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            width: 100%;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form label {
+            display: block;
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .contact-form textarea {
+            height: 150px;
+            resize: none;
+        }
+
+        .contact-form button {
+            background-color: #2e7d32;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .contact-form button:hover {
+            background-color: #388e3c;
+        }
+
+        /* Keyframe Animations for Load-In Transitions */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1 class="title">BLOGVIEW</h1>
+        <nav class="nav-bar">
+            <a href="#home">HOME</a>
+            <a href="#features">FEATURES</a>
+            <a href="#about">ABOUT</a>
+            <!-- <a href="#contact">CONTACT</a> -->
+            <a href="#login" class="login">LOGIN</a>
+        </nav>
+    </header>
+
+    <section class="main-section">
+        <div class="content">
+            <h2 class="tagline">SHARE YOUR THOUGHT TO ALL!!!</h2>
+            <p>
+                There’s a quiet we’ve grown accustomed to, a stillness we’ve cultivated in isolation. Waking dreams keep us from falling at the seams. The stories go on because even if the world stops turning on its usual axis, we stay still. This blog chronicles this strange global metamorphosis from the lens of creatives.
+            </p>
+            <p>
+                The images and narrative here prove something precious in these times: No matter how transformed beyond recognition, this new normal is Still Life.
+            </p>
+        </div>
+        <div class="image-container">
+            <img src="./1st home.png" alt="Blog Image">
+        </div>
+    </section>
+
+    <section class="features-section" id="features">
+        <h2>Our Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <img src="./creative blog.jpg" alt="Feature 1">
+                <h3>Creative Blogging</h3>
+                <p>Share your unique stories and ideas with a global audience through our intuitive blogging platform.</p>
+            </div>
+            <div class="feature-card">
+                <img src="./community puls.png" alt="Feature 2">
+                <h3>Community Engagement</h3>
+                <p>Connect with like-minded creatives, comment on posts, and build a community around your passions.</p>
+            </div>
+            <div class="feature-card">
+                <img src="./edit profile.png" alt="Feature 3">
+                <h3>Customizable Profiles</h3>
+                <p>Personalize your profile to reflect your style and showcase your best work to the world.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section" id="about">
+        <h2>About Us</h2>
+        <div class="about-content">
+            <p>
+                Blogview is a platform dedicated to creatives who want to share their stories, ideas, and perspectives with the world. Born out of a desire to capture the essence of human experience during times of change, we provide a space where voices can be heard, and stories can be told.
+            </p>
+            <p>
+                Our mission is to foster a community of thinkers, writers, and artists who believe in the power of storytelling to connect, inspire, and transform. Whether you're a seasoned blogger or just starting out, Blogview is here to help you share your thought to all.
+            </p>
+        </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+        <h2>Contact Us</h2>
+        <form class="contact-form">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your Name" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Your Email" required>
+
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
+
+    <script>
+        // Features, About, and Contact section transition on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.features-section, .about-section, .contact-section');
+            const windowHeight = window.innerHeight;
+
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                if (sectionTop >=windowHeight * 0.6) {
+                    section.classList.add('visible');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
