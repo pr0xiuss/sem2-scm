@@ -43,9 +43,9 @@ class Post(db.Model):
 with app.app_context():
     db.create_all()
 
-#route for newhome
+#route for home
 @app.route("/")
-@app.route('/newhome')  
+@app.route('/newhome')
 def newhome():
     return render_template("newhome.html")
 

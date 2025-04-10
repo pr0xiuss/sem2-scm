@@ -13,7 +13,7 @@ body {
 h2 {
     color: #333;
     margin-bottom: 20px;
-    font-size: 40px;    
+    font-size: 40px;
 }
 
 form {
@@ -21,25 +21,25 @@ form {
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 350px;
+    width: 320px;
     text-align: center;
-    overflow: hidden;
+    padding-right: 50px;
 }
 
 .form-group {
     margin-bottom: 15px;
     text-align: left;
-    position: relative;
 }
 
 label {
     display: block;
     margin-bottom: 5px;
-    color: #333;
+    color: #444444;
     font-weight: bold;
+    font-size: 16px;
 }
 
-input, textarea {
+input {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -47,19 +47,10 @@ input, textarea {
     background: #fff;
     color: #333;
     outline: none;
-    resize: none;
-    box-sizing: border-box;
-    max-width: 100%;
 }
 
-input::placeholder, textarea::placeholder {
+input::placeholder {
     color: #888;
-}
-
-textarea {
-    height: 120px;
-    max-height: 150px;
-    overflow-y: auto;
 }
 
 .submit-btn {
@@ -78,29 +69,16 @@ textarea {
     background: #7a9a01;
 }
 
-.back-btn, .home-btn {
+.back-btn {
     display: block;
     margin-top: 15px;
     text-decoration: none;
     color: #8db600;
     font-weight: bold;
     transition: 0.3s;
-    text-align: center;
 }
 
-.back-btn:hover, .home-btn:hover {
+.back-btn:hover {
     text-decoration: underline;
     color: #7a9a01;
-}
-.home-btn {
-    background-color: #007bff; /* Blue color */
-    color: white;
-    padding: 8px 15px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-.home-btn:hover {
-    background-color: #0056b3;
 }
