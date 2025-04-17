@@ -108,6 +108,9 @@ body {
 
 /* Post styling */
 .post {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: white;
     border-radius: 61px;
     max-width: 99%;
@@ -121,6 +124,32 @@ body {
 .post:hover {
     transform: translateY(-5px);
 }
+
+.post-content {
+    flex: 1;
+}
+
+/* New container for the author’s profile pic */
+.post-author-pic {
+    margin-left: 1rem;
+}
+
+/* Profile image same as in profile page */
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-pic {
+    width: 100px; /* Set the size you want for the profile picture */
+    height: 100px; /* Set the size you want for the profile picture */
+    border-radius: 50%; /* This makes the image circular */
+    object-fit: cover; /* This ensures the image is scaled properly without distortion */
+    border: 2px solid #1a535c; /* Optional: border around the profile picture */
+}
+
 
 .username {
     color: #7f8c8d;

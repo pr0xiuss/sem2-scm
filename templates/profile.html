@@ -3,21 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile</title>
+    <title>Your Profile</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='profile_css.css') }}">
-
 </head>
 <body>
 
+<div class="profile-container">
+
+    <!-- Top Section -->
     <div class="profile-header">
-        <h2>Your Profile</h2>
+        <img src="{{ user.profile_pic_url or url_for('static', filename='default.jpg') }}" class="profile-pic">
+        <div class="profile-info">
+            <h2>{{ user.username }}</h2>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Bio:</strong> {{ user.bio or "No bio yet." }}</p>
+        </div>
         <div class="profile-actions">
             <a href="{{ url_for('home') }}" class="home-btn">🏠 Home</a>
             <a href="{{ url_for('logout') }}" class="logout-btn">🚪 Logout</a>
+            <a href="{{ url_for('edit_profile') }}" class="edit-btn">✏️ Edit Profile</a> <!-- Edit Profile button -->
         </div>
     </div>
 
+    <!-- User's Posts -->
     <h3>Your Posts</h3>
 
     {% if posts %}
@@ -32,9 +41,11 @@
     {% else %}
         <p class="no-posts">You haven't posted anything yet.</p>
         <div class="profile-create">
-        <a href="{{ url_for('create_post') }}" class="create-btn">📝 Create a New Blog</a>
+            <a href="{{ url_for('create_post') }}" class="create-btn">📝 Create a New Blog</a>
         </div>
     {% endif %}
+
+</div>
 
 </body>
 </html>

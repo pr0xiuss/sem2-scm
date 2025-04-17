@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile_css.css') }}">
+</head>
+<body>
+
+<div class="profile-container">
+
+    <h2>Edit Profile</h2>
+    
+    <form method="POST" enctype="multipart/form-data">
+        <label>Bio:</label><br>
+        <textarea name="bio">{{ user.bio }}</textarea><br><br>
+    
+        <label>Change Profile Picture:</label>
+        <input type="file" name="profile_pic"><br><br>
+    
+        <input type="submit" value="Update">
+    </form>    
+    <a href="{{ url_for('profile') }}" class="back-btn">Back to Profile</a>
+
+</div>
+
+</body>
+</html>
