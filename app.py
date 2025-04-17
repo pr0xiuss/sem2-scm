@@ -4,168 +4,247 @@ import pytz
 from datetime import datetime
 import humanize
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+import os
+import cloudinary
+import cloudinary.uploader
 
+cloudinary.config(
+  cloud_name = 'dciud6yuq',
+  api_key = '463293421394546',
+  api_secret = '_h-PzGVB25edoT1trv4d3VZXif8'
+)
 app = Flask(__name__)
-app.secret_key = 'blog-project'  #sessions
+app.secret_key = 'blog-project'  # sessions
 
-#database config
+# File upload configuration
+app.config['UPLOAD_FOLDER'] = 'static/profile_pics'
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+
+# Database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:pr0xius@localhost/blog'
 db = SQLAlchemy(app)
 
-#reg humanize filter for Jinja2
+# Register humanize filter for Jinja2
 app.jinja_env.filters['humanize'] = humanize.naturaltime
 
+# Models
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    username = db.Column(db.String(100))
+    email = db.Column(db.String(120))
+    password = db.Column(db.String(100))
+    bio = db.Column(db.Text)
+    profile_pic_url = db.Column(db.String(500)) 
+
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=lambda: datetime.utcnow().replace(tzinfo=pytz.utc)) #store in utc 
+    created_at = db.Column(db.DateTime, default=lambda: datetime.utcnow().replace(tzinfo=pytz.utc))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-    user = db.relationship('User', backref=db.backref('posts', lazy=True))
+    user = db.relationship('User', backref='posts')
 
     def formatted_date(self):
-        local_timezone = pytz.timezone("Asia/Kolkata") #utc to kolkata
-        if self.created_at.tzinfo is None:
-            utc_time = self.created_at.replace(tzinfo=pytz.utc)  #ensuring UTC
-        else:
-            utc_time = self.created_at
-        created_at_local = utc_time.astimezone(local_timezone)  #convert to Kolkata
+        local_timezone = pytz.timezone("Asia/Kolkata")
+        utc_time = self.created_at.replace(tzinfo=pytz.utc) if self.created_at.tzinfo is None else self.created_at
+        created_at_local = utc_time.astimezone(local_timezone)
         return humanize.naturaltime(created_at_local)
 
-#create the database(run once to initialize it)
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    post = db.relationship('Post', backref=db.backref('comments', lazy=True))
+    user = db.relationship('User', backref=db.backref('comments', lazy=True))
+
 with app.app_context():
     db.create_all()
 
-#route for newhome
+# Routes
 @app.route("/")
-@app.route('/newhome')
+@app.route("/newhome")
 def newhome():
     return render_template("newhome.html")
 
-
+@app.route("/admin")
+def admin_dashboard():
+    if 'user_id' not in session or not session.get('is_admin'):
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for("login"))
+    users = User.query.filter(User.username != 'admin').all()
+    posts = Post.query.all()
+    return render_template("admin.html", users=users, posts=posts)
 
 @app.route("/home")
 def home():
     if 'user_id' not in session:
-        return redirect(url_for("login"))  #to login if not authenticated
-
-    posts = Post.query.all()  #fetch all posts
+        return redirect(url_for("login"))
+    posts = Post.query.all()
     return render_template("home.html", username=session.get('username'), posts=posts)
 
-
-#route for signup
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     if 'user_id' in session:
-        return redirect(url_for("home"))  #if logged in ->to home
-
+        return redirect(url_for("home"))
     if request.method == "POST":
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
-
         hashed_password = generate_password_hash(password)
         new_user = User(username=username, email=email, password=hashed_password)
-
         db.session.add(new_user)
         db.session.commit()
-
-        #log user in by storing id & username in session
         session['user_id'] = new_user.id
         session['username'] = new_user.username
-
         flash('Account created successfully!', 'success')
         return redirect(url_for("home"))
-
     return render_template("signup.html")
 
-#route for login
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if 'user_id' in session:
-        return redirect(url_for("home"))  #if logged in-> to home
-
+        return redirect(url_for("home"))
     if request.method == "POST":
         username = request.form['username']
         password = request.form['password']
-
         user = User.query.filter_by(username=username).first()
-
         if user and check_password_hash(user.password, password):
-            session['user_id'] = user.id  #store id in session
-            session['username'] = user.username  #store username in session
-            flash('Logged in successfully!', 'success') 
-            return redirect(url_for("home"))
+            session['user_id'] = user.id
+            session['username'] = user.username
+            session['is_admin'] = (user.username == 'admin')
+            flash('Admin logged in!' if user.username == 'admin' else 'Logged in successfully!', 'success')
+            return redirect(url_for("admin_dashboard" if user.username == 'admin' else "home"))
         else:
             flash('Invalid username or password!', 'danger')
             return redirect(url_for("login"))
-
     return render_template("login.html")
 
-#route for creating post
+@app.route("/admin/user/<int:user_id>")
+def admin_user_profile(user_id):
+    if 'user_id' not in session or not session.get('is_admin'):
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for("login"))
+    user = User.query.get_or_404(user_id)
+    posts = Post.query.filter_by(user_id=user_id).all()
+    return render_template("admin_user_profile.html", user=user, posts=posts)
+
+@app.route("/admin/delete_user/<int:user_id>", methods=["POST"])
+def admin_delete_user(user_id):
+    if 'user_id' not in session or not session.get('is_admin'):
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for("login"))
+    user = User.query.get_or_404(user_id)
+    Post.query.filter_by(user_id=user.id).delete()
+    db.session.delete(user)
+    db.session.commit()
+    flash("User and their posts deleted!", "success")
+    return redirect(url_for("admin_dashboard"))
+
+@app.route("/admin/delete_post/<int:post_id>")
+def admin_delete_post(post_id):
+    if 'user_id' not in session or not session.get('is_admin'):
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for("login"))
+    post = Post.query.get_or_404(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    flash("Post deleted!", "success")
+    return redirect(request.referrer or url_for("admin_dashboard"))
+
 @app.route("/create", methods=["GET", "POST"])
 def create_post():
     if 'user_id' not in session:
-        return redirect(url_for('login')) 
-
+        return redirect(url_for('login'))
     if request.method == "POST":
         title = request.form.get("title")
         content = request.form.get("content")
-
-        #current kolkata time to UTC
         local_timezone = pytz.timezone("Asia/Kolkata")
-        created_at_local = datetime.now(local_timezone)  #kolkata
-        created_at_utc = created_at_local.astimezone(pytz.utc)  #convert to UTC
-
-        #create a with UTC timestamp
+        created_at_local = datetime.now(local_timezone)
+        created_at_utc = created_at_local.astimezone(pytz.utc)
         new_post = Post(title=title, content=content, created_at=created_at_utc, user_id=session['user_id'])
-
-        #add post to database and commit
         db.session.add(new_post)
         db.session.commit()
-
         flash('Post created successfully!', 'success')
         return redirect(url_for("home"))
-
     return render_template("create_post.html")
 
-#route for showing post
 @app.route("/post/<int:post_id>")
 def show_post(post_id):
     post = Post.query.get_or_404(post_id)
-
-    #convert UTC to Kolkata
     local_timezone = pytz.timezone("Asia/Kolkata")
     post.created_at = post.created_at.replace(tzinfo=pytz.utc).astimezone(local_timezone)
-
     return render_template("show_post.html", post=post)
 
-#route for logging out
 @app.route("/logout")
 def logout():
     session.pop('user_id', None)
     session.pop('username', None)
+    session.pop('is_admin', None)
     flash('Logged out successfully!', 'success')
     return redirect(url_for("newhome"))
 
-@app.route("/profile")
+@app.route("/post/<int:post_id>", methods=["POST"])
+def add_comment(post_id):
+    if 'user_id' not in session:
+        flash("Please login to comment!", "warning")
+        return redirect(url_for("login"))
+    content = request.form['comment']
+    new_comment = Comment(content=content, post_id=post_id, user_id=session['user_id'])
+    db.session.add(new_comment)
+    db.session.commit()
+    flash("Comment added!", "success")
+    return redirect(url_for("show_post", post_id=post_id))
+
+@app.route("/profile", methods=["GET", "POST"])
 def profile():
     if 'user_id' not in session:
-        return redirect(url_for("login"))  #if not logged in
-
+        return redirect(url_for("login"))
     user_id = session['user_id']
     user = User.query.get(user_id)
-    posts = Post.query.filter_by(user_id=user_id).all()  #get user's posts
+    posts = Post.query.filter_by(user_id=user_id).all()
+    if request.method == "POST":
+        bio = request.form.get('bio')
+        if 'profile_pic' in request.files:
+            file = request.files['profile_pic']
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                user.profile_pic = filename
+        user.bio = bio
+        db.session.commit()
+        flash("Profile updated!", "success")
+        return redirect(url_for("profile"))
+    return render_template("profile.html", username=user.username, posts=posts, user=user)
 
-    return render_template("profile.html", username=user.username, posts=posts)
+# Route for editing profile
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def edit_profile():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
 
+    user = User.query.get(session['user_id'])
+
+    if request.method == 'POST':
+        user.bio = request.form['bio']
+        if 'profile_pic' in request.files:
+            file = request.files['profile_pic']
+            if file.filename:
+                upload_result = cloudinary.uploader.upload(file)
+                user.profile_pic_url = upload_result['secure_url']  #Saves URL
+
+        db.session.commit()
+        return redirect(url_for('profile'))
+    return render_template('edit_profile.html', user=user)
+
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 if __name__ == "__main__":
     app.run(debug=True)
