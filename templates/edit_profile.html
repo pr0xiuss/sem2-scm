@@ -6,25 +6,107 @@
     <title>Edit Profile</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='profile_css.css') }}">
+    <style>
+        .profile-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 6px;
+            color: #444;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            resize: none;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        input[type="file"] {
+            font-size: 14px;
+        }
+
+        input[type="submit"] {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .char-count {
+            font-size: 12px;
+            color: #666;
+            text-align: right;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
 
 <div class="profile-container">
-
     <h2>Edit Profile</h2>
     
     <form method="POST" enctype="multipart/form-data">
-        <label>Bio:</label><br>
-        <textarea name="bio">{{ user.bio }}</textarea><br><br>
-    
-        <label>Change Profile Picture:</label>
-        <input type="file" name="profile_pic"><br><br>
-    
+        <label for="bio">Bio (Max 100 characters):</label>
+        <textarea name="bio" id="bio" maxlength="100">{{ user.bio }}</textarea>
+        <div class="char-count"><span id="charCount">0</span>/100 characters</div>
+
+        <label for="profile_pic">Change Profile Picture:</label>
+        <input type="file" name="profile_pic" id="profile_pic"><br><br>
+
         <input type="submit" value="Update">
     </form>    
-    <a href="{{ url_for('profile') }}" class="back-btn">Back to Profile</a>
 
+    <a href="{{ url_for('profile') }}" class="back-btn">← Back to Profile</a>
 </div>
+
+<script>
+    const bio = document.getElementById("bio");
+    const charCount = document.getElementById("charCount");
+
+    function updateCharCount() {
+        const length = bio.value.length;
+        charCount.textContent = length;
+    }
+
+    bio.addEventListener("input", updateCharCount);
+    window.addEventListener("load", updateCharCount);
+</script>
 
 </body>
 </html>

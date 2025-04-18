@@ -1,3 +1,4 @@
+/* Edit section */
 .edit-section {
     margin-top: 30px;
     padding-top: 20px;
@@ -39,7 +40,8 @@
 .submit-btn:hover {
     background-color: #3e8e41;
 }
-/* Profile image container styling */
+
+/* Profile container layout */
 .profile-header {
     display: flex;
     align-items: center;
@@ -47,16 +49,26 @@
     margin-bottom: 20px;
 }
 
-/* Styling for profile image */
-.profile-img {
-    width: 120px; /* Adjust the width of the profile picture */
-    height: 120px; /* Maintain aspect ratio */
-    border-radius: 50%; /* Make the profile picture circular */
-    object-fit: cover; /* Ensure the image covers the circle without stretching */
-    margin-right: 20px; /* Add space between the image and text */
+/* Profile picture styling */
+.profile-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #1a535c;
+    margin-right: 20px;
 }
 
-/* Profile info styling */
+/* Alternative profile-img (unused) */
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+/* Info styling */
 .profile-info {
     flex-grow: 1;
 }
@@ -70,7 +82,7 @@
     margin: 5px 0;
 }
 
-/* Actions for home, logout, and edit buttons */
+/* Button styles */
 .profile-actions a {
     display: inline-block;
     margin-top: 10px;
@@ -87,7 +99,7 @@
     background-color: #0056b3;
 }
 
-/* Post styling */
+/* Posts */
 .post {
     margin-bottom: 20px;
 }
@@ -115,7 +127,6 @@
     text-decoration: underline;
 }
 
-/* For when no posts are available */
 .no-posts {
     font-size: 1.2em;
     color: #888;
@@ -125,10 +136,41 @@
     margin-top: 20px;
 }
 
-.profile-pic {
-    width: 100px; /* Set the size you want for the profile picture */
-    height: 100px; /* Set the size you want for the profile picture */
-    border-radius: 50%; /* This makes the image circular */
-    object-fit: cover; /* This ensures the image is scaled properly without distortion */
-    border: 2px solid #1a535c; /* Optional: border around the profile picture */
+/* Instagram-style modal for profile picture */
+.insta-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.9);
+    align-items: center;
+    justify-content: center;
 }
+
+.insta-modal-img {
+    max-width: 300px;
+    max-height: 300px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.close-modal {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 10001;
+}
+
+/* Optional: prevent scrolling when modal is open */
+body.no-scroll {
+    overflow: hidden;
+}
+

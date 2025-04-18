@@ -1,25 +1,20 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
 from flask_sqlalchemy import SQLAlchemy
 import pytz
 from datetime import datetime
 import humanize
 from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename
-import os
 import cloudinary
 import cloudinary.uploader
 
 cloudinary.config(
-  cloud_name = 'dciud6yuq',
-  api_key = '463293421394546',
-  api_secret = '_h-PzGVB25edoT1trv4d3VZXif8'
+    cloud_name='dciud6yuq',
+    api_key='463293421394546',
+    api_secret='_h-PzGVB25edoT1trv4d3VZXif8'
 )
-app = Flask(__name__)
-app.secret_key = 'blog-project'  # sessions
 
-# File upload configuration
-app.config['UPLOAD_FOLDER'] = 'static/profile_pics'
-app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+app = Flask(__name__)
+app.secret_key = 'blog-project'
 
 # Database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:pr0xius@localhost/blog'
@@ -27,6 +22,8 @@ db = SQLAlchemy(app)
 
 # Register humanize filter for Jinja2
 app.jinja_env.filters['humanize'] = humanize.naturaltime
+
+DEFAULT_PROFILE_PIC_URL = 'https://res.cloudinary.com/dciud6yuq/image/upload/v1744963258/pfp_kniw7o.jpg'
 
 # Models
 class User(db.Model):
@@ -36,7 +33,6 @@ class User(db.Model):
     password = db.Column(db.String(100))
     bio = db.Column(db.Text)
     profile_pic_url = db.Column(db.String(500)) 
-
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -62,6 +58,12 @@ class Comment(db.Model):
     post = db.relationship('Post', backref=db.backref('comments', lazy=True))
     user = db.relationship('User', backref=db.backref('comments', lazy=True))
 
+    def formatted_date(self):
+        local_timezone = pytz.timezone("Asia/Kolkata")
+        utc_time = self.created_at.replace(tzinfo=pytz.utc) if self.created_at.tzinfo is None else self.created_at
+        created_at_local = utc_time.astimezone(local_timezone)
+        return humanize.naturaltime(created_at_local)
+
 with app.app_context():
     db.create_all()
 
@@ -84,7 +86,7 @@ def admin_dashboard():
 def home():
     if 'user_id' not in session:
         return redirect(url_for("login"))
-    posts = Post.query.all()
+    posts = Post.query.order_by(Post.created_at.desc()).all()
     return render_template("home.html", username=session.get('username'), posts=posts)
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -96,7 +98,13 @@ def signup():
         email = request.form['email']
         password = request.form['password']
         hashed_password = generate_password_hash(password)
-        new_user = User(username=username, email=email, password=hashed_password)
+
+        new_user = User(
+            username=username,
+            email=email,
+            password=hashed_password,
+            profile_pic_url=DEFAULT_PROFILE_PIC_URL
+        )
         db.session.add(new_user)
         db.session.commit()
         session['user_id'] = new_user.id
@@ -145,16 +153,36 @@ def admin_delete_user(user_id):
     flash("User and their posts deleted!", "success")
     return redirect(url_for("admin_dashboard"))
 
-@app.route("/admin/delete_post/<int:post_id>")
+@app.route("/admin/delete_post/<int:post_id>",methods=["POST"])
 def admin_delete_post(post_id):
     if 'user_id' not in session or not session.get('is_admin'):
         flash("Unauthorized access!", "danger")
         return redirect(url_for("login"))
-    post = Post.query.get_or_404(post_id)
+    post = Post.query.get_or_404(post_id)   
     db.session.delete(post)
     db.session.commit()
     flash("Post deleted!", "success")
     return redirect(request.referrer or url_for("admin_dashboard"))
+
+@app.route("/admin/delete_comment/<int:comment_id>", methods=["POST"])
+def admin_delete_comment(comment_id):
+    if 'user_id' not in session or not session.get('is_admin'):
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for("login"))
+    comment = Comment.query.get_or_404(comment_id)
+    db.session.delete(comment)
+    db.session.commit()
+    flash("Comment deleted!", "success")
+    return redirect(request.referrer or url_for("admin_dashboard"))
+
+@app.route("/admin/post/<int:post_id>")
+def admin_view_post(post_id):
+    if 'user_id' not in session or not session.get('is_admin'):
+        flash("Unauthorized access!", "danger")
+        return redirect(url_for("login"))
+    post = Post.query.get_or_404(post_id)
+    comments = Comment.query.filter_by(post_id=post.id).all()
+    return render_template("admin_view_post.html", post=post, comments=comments)
 
 @app.route("/create", methods=["GET", "POST"])
 def create_post():
@@ -179,6 +207,22 @@ def show_post(post_id):
     local_timezone = pytz.timezone("Asia/Kolkata")
     post.created_at = post.created_at.replace(tzinfo=pytz.utc).astimezone(local_timezone)
     return render_template("show_post.html", post=post)
+
+@app.route('/user/<int:user_id>')
+def view_user_profile(user_id):
+    user = User.query.get_or_404(user_id)
+    posts = Post.query.filter_by(user_id=user_id).all()
+    is_owner = (session.get('user_id') == user.id)
+    
+    current_user = User.query.get(session.get('user_id')) if 'user_id' in session else None
+
+    return render_template(
+        'profile.html',
+        user=user,
+        posts=posts,
+        is_owner=is_owner,
+        current_user=current_user
+    )
 
 @app.route("/logout")
 def logout():
@@ -207,21 +251,16 @@ def profile():
     user_id = session['user_id']
     user = User.query.get(user_id)
     posts = Post.query.filter_by(user_id=user_id).all()
-    if request.method == "POST":
-        bio = request.form.get('bio')
-        if 'profile_pic' in request.files:
-            file = request.files['profile_pic']
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                user.profile_pic = filename
-        user.bio = bio
-        db.session.commit()
-        flash("Profile updated!", "success")
-        return redirect(url_for("profile"))
-    return render_template("profile.html", username=user.username, posts=posts, user=user)
+    
+    return render_template(
+        "profile.html",
+        username=user.username,
+        posts=posts,
+        user=user,
+        is_owner=True,
+        current_user=user
+    )
 
-# Route for editing profile
 @app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
     if 'user_id' not in session:
@@ -235,16 +274,57 @@ def edit_profile():
             file = request.files['profile_pic']
             if file.filename:
                 upload_result = cloudinary.uploader.upload(file)
-                user.profile_pic_url = upload_result['secure_url']  #Saves URL
+                user.profile_pic_url = upload_result['secure_url']
 
         db.session.commit()
         return redirect(url_for('profile'))
     return render_template('edit_profile.html', user=user)
 
+@app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
+def edit_post(post_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
 
+    post = Post.query.get_or_404(post_id)
+    if post.user_id != session['user_id']:
+        abort(403)
+
+    if request.method == 'POST':
+        post.title = request.form['title']
+        post.content = request.form['content']
+        db.session.commit()
+        return redirect(url_for('show_post', post_id=post.id))
+
+    return render_template('edit_post.html', post=post)
+
+@app.route('/delete_post/<int:post_id>', methods=['POST'])
+def delete_post(post_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    post = Post.query.get_or_404(post_id)
+    if post.user_id != session['user_id']:
+        abort(403)
+
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(url_for('profile'))
+
+@app.route('/delete_comment/<int:comment_id>', methods=['POST'])
+def delete_comment(comment_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    comment = Comment.query.get_or_404(comment_id)
+    if comment.user_id != session['user_id']:
+        abort(403)
+
+    db.session.delete(comment)
+    db.session.commit()
+    return redirect(request.referrer)
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'png', 'jpg', 'jpeg', 'gif'}
 
 if __name__ == "__main__":
     app.run(debug=True)
