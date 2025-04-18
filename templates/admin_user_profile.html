@@ -7,18 +7,35 @@
         body {
             font-family: Arial, sans-serif;
         }
+
         .profile-container {
             margin-top: 20px;
         }
-        .profile-info {
+
+        .profile-header {
+            display: flex;
+            align-items: center;
             margin-bottom: 20px;
         }
-        .profile-info h3 {
-            margin-top: 0;
+
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #1a535c;
+            margin-right: 20px;
+            cursor: pointer;
         }
+
+        .profile-info h3 {
+            margin: 5px 0;
+        }
+
         .posts-list {
             margin-top: 20px;
         }
+
         .post-card {
             border: 1px solid #ccc;
             padding: 15px;
@@ -26,8 +43,9 @@
             border-radius: 5px;
             background-color: #f9f9f9;
         }
-        .back-btn {
-            margin-top: 20px;
+
+        .button {
+            margin-top: 10px;
             background-color: #007BFF;
             color: white;
             padding: 8px 15px;
@@ -35,18 +53,66 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        .back-btn:hover {
+
+        .button:hover {
             background-color: #0056b3;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* Modal Styling */
+        .insta-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0,0,0,0.9);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .insta-modal-img {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 10001;
+        }
+
+        body.no-scroll {
+            overflow: hidden;
         }
     </style>
 </head>
 <body>
     <div class="profile-container">
-        <h2>{{ user.username }}'s Profile</h2>
-
-        <div class="profile-info">
-            <h3>Email: {{ user.email }}</h3>
-            <h3>Username: {{ user.username }}</h3>
+        <div class="profile-header">
+            <img id="profile-pic" src="{{ user.profile_pic_url or url_for('static', filename='default.jpg') }}" class="profile-pic" alt="Profile Picture">
+            <div class="profile-info">
+                <h2>{{ user.username }}'s Profile</h2>
+                <h3>Email: {{ user.email }}</h3>
+                <h3>Username: {{ user.username }}</h3>
+            </div>
         </div>
 
         <div class="posts-list">
@@ -54,9 +120,12 @@
             {% if posts %}
                 {% for post in posts %}
                 <div class="post-card">
-                    <h5>{{ post.title }}</h5>
+                    <h5><a href="{{ url_for('admin_view_post', post_id=post.id) }}">{{ post.title }}</a></h5>
                     <p>{{ post.content[:100] }}...</p>
                     <p><i>Posted {{ post.formatted_date() }}</i></p>
+                    <form action="{{ url_for('admin_delete_post', post_id=post.id) }}" method="POST">
+                        <button type="submit" class="button delete-btn">Delete Post</button>
+                    </form>
                 </div>
                 {% endfor %}
             {% else %}
@@ -65,8 +134,46 @@
         </div>
 
         <a href="{{ url_for('admin_dashboard') }}">
-            <button class="back-btn">Back to Admin Dashboard</button>
+            <button class="button">Back to Admin Dashboard</button>
         </a>
     </div>
+
+    <!-- Fullscreen Profile Picture Modal -->
+    <div id="profile-modal" class="insta-modal">
+        <span class="close-modal">&times;</span>
+        <img class="insta-modal-img" id="expanded-pic" alt="Enlarged Profile">
+    </div>
+
+    <script>
+        const profilePic = document.getElementById("profile-pic");
+        const modal = document.getElementById("profile-modal");
+        const expandedPic = document.getElementById("expanded-pic");
+        const closeModal = document.querySelector(".close-modal");
+
+        profilePic.addEventListener("click", () => {
+            expandedPic.src = profilePic.src;
+            modal.style.display = "flex";
+            document.body.classList.add("no-scroll");
+        });
+
+        closeModal.addEventListener("click", () => {
+            modal.style.display = "none";
+            document.body.classList.remove("no-scroll");
+        });
+
+        window.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+                document.body.classList.remove("no-scroll");
+            }
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                modal.style.display = "none";
+                document.body.classList.remove("no-scroll");
+            }
+        });
+    </script>
 </body>
 </html>
