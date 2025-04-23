@@ -16,21 +16,28 @@
             <a href="{{ url_for('logout') }}" class="logout-btn">🚪 Logout</a>
         </div>
     </div>
+
     <div class="new">
-    <a href="/create" class="create-btn">📝 Create a New Blog</a>
-    </div>
-    <div class="recent">
-    <h3>📖 Recent Blog Posts</h3>
+        <a href="/create" class="create-btn">📝 Create a New Blog</a>
     </div>
 
-    <!--Post List-->
+    <div class="recent">
+        <h3>📖 Recent Blog Posts</h3>
+    </div>
+
+    <!-- Post List -->
     {% for post in posts %}
-    <div class="post">
-        <p class="username">{{ post.user.username }}</p> 
-        <h4 class="post-title">{{ post.title }}</h4>
-        <p class="post-preview">{{ post.content[:100] }}...</p>
-        <p class="post-date">{{ post.formatted_date() }}</p>
-        <a href="{{ url_for('show_post', post_id=post.id) }}" class="read-more">Read More</a>
+    <div class="post" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="post-content">
+            <p class="username">{{ post.user.username }}</p>
+            <h4 class="post-title">{{ post.title }}</h4>
+            <p class="post-preview">{{ post.content[:100] }}...</p>
+            <p class="post-date">{{ post.formatted_date() }}</p>
+            <a href="{{ url_for('show_post', post_id=post.id) }}" class="read-more">Read More</a>
+        </div>
+        <div class="post-author-pic">
+            <img src="{{ post.user.profile_pic_url or url_for('static', filename='default.jpg') }}" class="profile-pic">
+        </div>
     </div>
     {% endfor %}
 

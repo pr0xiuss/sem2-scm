@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ user.username }}'s Profile</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin_user_profile.css') }}" />
+</head>
+<body>
+    <style>
+        /* admin_user_profile.css */
+
+/* Reset and base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  color: #1e293b;
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.profile-container {
+  max-width: 800px;
+  width: 100%;
+  background: #ffffff;
+  padding: 32px 40px;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Profile header */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.profile-pic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgb(37 99 235 / 0.3);
+  transition: transform 0.3s ease;
+}
+
+.profile-pic:hover,
+.profile-pic:focus {
+  transform: scale(1.05);
+  outline: none;
+  box-shadow: 0 4px 20px rgb(0,0,0, 0.2);
+}
+
+.profile-info h2 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.profile-info h3 {
+  margin: 4px 0;
+  font-weight: 600;
+  color: #475569;
+}
+
+/* Posts list */
+.posts-list h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #0f172a;
+}
+
+.post-card {
+  background-color: #f9fafb;
+  border-radius: 12px;
+  border: 1.5px solid #d1d5db;
+  padding: 20px 24px;
+  box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: box-shadow 0.3s ease;
+}
+
+.post-card:hover,
+.post-card:focus-within {
+  box-shadow: inset 0 1px 8px rgb(37 99 235 / 0.2);
+}
+
+.post-card h5 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #2563eb;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.post-card h5 a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.post-card h5 a:hover,
+.post-card h5 a:focus {
+  color: #1e40af;
+  outline: none;
+  text-decoration: underline;
+}
+
+.post-card p {
+  margin: 0;
+  color: #475569;
+  font-size: 1rem;
+  white-space: pre-wrap;
+}
+
+.post-card p i {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+/* Buttons */
+.button {
+  margin-top: 12px;
+  align-self: flex-start;
+  background-color: #3b82f6;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+}
+
+.button:hover,
+.button:focus {
+  background-color: #2563eb;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.6);
+  outline: none;
+}
+
+/* Delete Button Overrides */
+.delete-btn {
+  background-color: #ef4444;
+}
+
+.delete-btn:hover,
+.delete-btn:focus {
+  background-color: #b91c1c;
+  box-shadow: 0 6px 14px rgba(185, 28, 28, 0.7);
+  outline: none;
+}
+
+/* Back to Admin Dashboard Button */
+a > .button {
+  margin-top: 0;
+}
+
+/* Modal Styles */
+.insta-modal {
+  display: none;
+  position: fixed;
+  z-index: 10000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.85);
+  align-items: center;
+  justify-content: center;
+}
+
+.insta-modal-img {
+  max-width: 320px;
+  max-height: 320px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 24px rgba(0,0,0,0.2);
+}
+
+.close-modal {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  font-size: 42px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  z-index: 10001;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+  color: #ffff;
+  outline: none;
+}
+
+/* Disable scroll when modal open */
+body.no-scroll {
+  overflow: hidden;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .profile-container {
+    padding: 28px 24px;
+  }
+  
+  .profile-header {
+    justify-content: center;
+  }
+
+  .profile-info h2 {
+    font-size: 1.7rem;
+    text-align: center;
+  }
+  
+  .profile-info h3 {
+    font-size: 1rem;
+  }
+  
+  .posts-list h4 {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+  
+  .post-card {
+    padding: 16px 18px;
+  }
+
+  .button {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+  
+  .insta-modal-img {
+    max-width: 260px;
+    max-height: 260px;
+  }
+}
+    </style>
+  <div class="profile-container" role="main" aria-label="{{ user.username }}'s profile and posts">
+    <div class="profile-header">
+      <img 
+        id="profile-pic" 
+        src="{{ user.profile_pic_url or url_for('static', filename='default.jpg') }}" 
+        class="profile-pic" 
+        alt="Profile picture of {{ user.username }}" 
+        tabindex="0"
+      />
+      <div class="profile-info">
+        <h2>{{ user.username }}'s Profile</h2>
+        <h3>Email: {{ user.email }}</h3>
+        <h3>Username: {{ user.username }}</h3>
+      </div>
+    </div>
+
+    <div class="posts-list">
+      <h4>User's Posts:</h4>
+      {% if posts %}
+        {% for post in posts %}
+        <div class="post-card" tabindex="0">
+          <h5><a href="{{ url_for('admin_view_post', post_id=post.id) }}">{{ post.title }}</a></h5>
+          <p>{{ post.content[:100] }}...</p>
+          <p><i>Posted {{ post.formatted_date() }}</i></p>
+          <form action="{{ url_for('admin_delete_post', post_id=post.id) }}" method="POST">
+            <button type="submit" class="button delete-btn" aria-label="Delete post {{ post.title }}">Delete Post</button>
+          </form>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p>No posts found.</p>
+      {% endif %}
+    </div>
+
+    <a href="{{ url_for('admin_dashboard') }}">
+      <button class="button" aria-label="Back to Admin Dashboard">Back to Admin Dashboard</button>
+    </a>
+  </div>
+
+  <!-- Fullscreen Profile Picture Modal -->
+  <div id="profile-modal" class="insta-modal" role="dialog" aria-modal="true" aria-label="Profile picture preview">
+    <span class="close-modal" role="button" tabindex="0" aria-label="Close profile picture preview">&times;</span>
+    <img class="insta-modal-img" id="expanded-pic" alt="Enlarged Profile picture" />
+  </div>
+
+  <script>
+    const profilePic = document.getElementById("profile-pic");
+    const modal = document.getElementById("profile-modal");
+    const expandedPic = document.getElementById("expanded-pic");
+    const closeModal = document.querySelector(".close-modal");
+
+    profilePic.addEventListener("click", () => {
+      expandedPic.src = profilePic.src;
+      modal.style.display = "flex";
+      document.body.classList.add("no-scroll");
+      closeModal.focus();
+    });
+
+    profilePic.addEventListener("keydown", e => {
+      if(e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        expandedPic.src = profilePic.src;
+        modal.style.display = "flex";
+        document.body.classList.add("no-scroll");
+        closeModal.focus();
+      }
+    });
+
+    closeModal.addEventListener("click", () => {
+      modal.style.display = "none";
+      document.body.classList.remove("no-scroll");
+      profilePic.focus();
+    });
+
+    closeModal.addEventListener("keydown", e => {
+      if(e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        modal.style.display = "none";
+        document.body.classList.remove("no-scroll");
+        profilePic.focus();
+      }
+    });
+
+    window.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        modal.style.display = "none";
+        document.body.classList.remove("no-scroll");
+        profilePic.focus();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        modal.style.display = "none";
+        document.body.classList.remove("no-scroll");
+        profilePic.focus();
+      }
+    });
+  </script>
+</body>
+</html>

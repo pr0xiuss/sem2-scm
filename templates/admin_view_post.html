@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ post.title }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin_view_post.css') }}" />
+</head>
+<body>
+    <style>
+        /* admin_view_post.css */
+
+/* Reset and base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  color: #1e293b;
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Container */
+.post-container {
+  background: #ffffff;
+  max-width: 720px;
+  width: 100%;
+  padding: 36px 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.12);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Title */
+.post-container h2 {
+  margin: 0 0 24px 0;
+  font-size: 2.75rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+/* Post content */
+.post-content p {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: #334155;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin-bottom: 24px;
+}
+
+/* Posted date */
+.post-container > p i {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin-bottom: 36px;
+  user-select: none;
+}
+
+/* Comments Section */
+.comments-section {
+  border-top: 2px solid #e2e8f0;
+  padding-top: 32px;
+}
+
+.comments-section h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 20px;
+  user-select: none;
+}
+
+/* Comment card */
+.comment-card {
+  background-color: #f9fafb;
+  border-radius: 12px;
+  border: 1.5px solid #cbd5e1;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  box-shadow: inset 0 1px 4px rgb(0 0 0 / 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+.comment-card:hover,
+.comment-card:focus-within {
+  box-shadow: inset 0 1px 10px rgb(37 99 235 / 0.15);
+  outline: none;
+}
+
+.comment-card p {
+  margin: 0 0 8px 0;
+  color: #334155;
+  font-size: 1rem;
+  white-space: pre-wrap;
+}
+
+.comment-card p strong {
+  font-weight: 700;
+  color: #1e293b;
+  user-select: text;
+}
+
+.comment-card p i {
+  font-style: normal;
+  font-size: 0.875rem;
+  color: #64748b;
+  user-select: none;
+}
+
+/* Delete Comment Button */
+.delete-btn {
+  margin-top: 10px;
+  background-color: #ef4444;
+  color: white;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+  display: inline-block;
+  min-width: 140px;
+}
+
+.delete-btn:hover,
+.delete-btn:focus {
+  background-color: #b91c1c;
+  box-shadow: 0 6px 16px rgba(185, 28, 28, 0.7);
+  outline: none;
+}
+
+/* Back to Profile Button */
+.button {
+  margin-top: 30px;
+  background-color: #3b82f6;
+  color: white;
+  padding: 12px 26px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: center;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+  display: inline-block;
+}
+
+.button:hover,
+.button:focus {
+  background-color: #2563eb;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.85);
+  outline: none;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  body {
+    padding: 20px 12px;
+  }
+
+  .post-container {
+    padding: 28px 24px;
+  }
+
+  .post-container h2 {
+    font-size: 2rem;
+    margin-bottom: 18px;
+  }
+
+  .post-content p {
+    font-size: 1.1rem;
+    margin-bottom: 18px;
+  }
+
+  .comments-section h3 {
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+  }
+
+  .comment-card {
+    padding: 16px 18px;
+  }
+
+  .delete-btn,
+  .button {
+    font-size: 1rem;
+    padding: 10px 20px;
+    min-width: auto;
+  }
+
+  .delete-btn {
+    width: 100%;
+  }
+  
+  .button {
+    width: 100%;
+  }
+}
+    </style>
+  <div class="post-container" role="main">
+    <h2>{{ post.title }}</h2>
+    <div class="post-content">
+      <p>{{ post.content|safe }}</p>
+    </div>
+    <p><i>Posted {{ post.formatted_date() }}</i></p>
+
+    <div class="comments-section">
+      <h3>Comments:</h3>
+      {% if comments %}
+        {% for comment in comments %}
+        <div class="comment-card" tabindex="0">
+          <p><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</p>
+          <p><i>Commented {{ comment.formatted_date() }}</i></p>
+          <!-- Delete Comment Button (Only visible to Admin) -->
+          <form action="{{ url_for('admin_delete_comment', comment_id=comment.id) }}" method="POST">
+            <button type="submit" class="delete-btn" aria-label="Delete comment by {{ comment.user.username }}">Delete Comment</button>
+          </form>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p>No comments yet.</p>
+      {% endif %}
+    </div>
+
+    <a href="{{ url_for('admin_user_profile', user_id=post.user.id) }}">
+      <button class="button" aria-label="Back to user profile">Back to Profile</button>
+    </a>
+  </div>
+</body>
+</html>

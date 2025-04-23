@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Edit Post</title>
+
+  <!-- Use Google Fonts for modern typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Reset & base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: #f8f9fa;
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #1f2937;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+    }
+
+    .container {
+      background-color: white;
+      max-width: 700px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+      padding: 32px 36px 40px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h2 {
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 28px;
+      color: #111827;
+      letter-spacing: -0.02em;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 22px;
+    }
+
+    label {
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #374151;
+      user-select: none;
+    }
+
+    input[type="text"],
+    textarea {
+      padding: 14px 16px;
+      font-size: 1rem;
+      border: 1.8px solid #d1d5db;
+      border-radius: 10px;
+      background-color: #f9fafb;
+      font-family: inherit;
+      color: #1f2937;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      resize: none;
+      box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.07);
+      min-height: 44px;
+    }
+
+    textarea {
+      min-height: 180px;
+    }
+
+    input[type="text"]::placeholder,
+    textarea::placeholder {
+      color: #9ca3af;
+      font-style: italic;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 8px rgba(37, 99, 235, 0.5);
+      background-color: #ffffff;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    button[type="submit"],
+    .btn-cancel {
+      flex: 1 1 48%;
+      padding: 14px 0;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      user-select: none;
+      border: none;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    button[type="submit"] {
+      background-image: linear-gradient(45deg, #2563eb 0%, #3b82f6 100%);
+      color: white;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.7);
+    }
+
+    button[type="submit"]:hover,
+    button[type="submit"]:focus {
+      background-image: linear-gradient(45deg, #1e40af 0%, #2563eb 100%);
+      box-shadow: 0 8px 20px rgba(30, 64, 175, 0.9);
+      outline: none;
+      transform: translateY(-2px);
+    }
+
+    /* Cancel button styled as outline */
+    .btn-cancel {
+      background-color: #f3f4f6;
+      color: #374151;
+      border: 2px solid #9ca3af;
+      box-shadow: none;
+      text-decoration: none;
+    }
+
+    .btn-cancel:hover,
+    .btn-cancel:focus {
+      background-color: #e5e7eb;
+      border-color: #6b7280;
+      color: #111827;
+      outline: none;
+      box-shadow: 0 4px 8px rgba(107, 114, 128, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .btn-group {
+        flex-direction: column;
+      }
+      button[type="submit"],
+      .btn-cancel {
+        flex: 1 1 100%;
+      }
+    }
+
+    .post-content p {
+        font-size: 24px; 
+        color: #374151;
+        white-space: pre-wrap;
+        line-height: 1.7;
+    }
+
+  </style>
+</head>
+<body>
+  <main class="container" role="main" aria-label="Edit Post Form">
+    <h2>Edit Post</h2>
+    <form method="POST" novalidate>
+      <div class="form-group">
+        <label for="title">Post Title</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value="{{ post.title }}"
+          placeholder="Enter post title"
+          required
+          maxlength="150"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="content">Post Content</label>
+        <textarea
+          id="content"
+          name="content"
+          placeholder="Write your post content here..."
+          rows="10"
+          required
+          maxlength="10000"
+        >{{ post.content }}</textarea>
+      </div>
+
+      <div class="btn-group">
+        <button type="submit" aria-label="Update Post">Update Post</button>
+        <a href="{{ url_for('show_post', post_id=post.id) }}" class="btn-cancel" role="button" aria-label="Cancel editing and go back">Cancel</a>
+      </div>
+    </form>
+  </main>
+</body>
+</html>
