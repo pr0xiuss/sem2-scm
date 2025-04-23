@@ -1,182 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <style>
-        /* Body styling */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #efffba;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            color: #333;
-            position: relative; /* For absolute positioning of top-left back arrow */
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign Up</title>
 
-        /* Heading */
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 40px;
-        }
+  <style>
+    /* Reset & base */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
-        /* Form styling */
-        form {
-            background: #f9f9f9;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 350px;
-            text-align: center;
-            overflow: hidden;
-        }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f0f4f8; /* soft light blue-gray background */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      color: #1e293b; /* dark slate gray */
+      position: relative;
+      padding: 20px;
+    }
 
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-            position: relative;
-        }
+    /* Top-left back arrow button */
+    .top-back-arrow {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: #ffffff;
+      border: 2px solid #3b82f6; /* blue-500 */
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-weight: 700;
+      font-size: 20px;
+      color: #1e293b;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+      cursor: pointer;
+      user-select: none;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: bold;
-        }
+    .top-back-arrow:hover,
+    .top-back-arrow:focus {
+      background-color: #2563eb; /* blue-600 */
+      border-color: #1e40af; /* blue-800 */
+      color: #f9fafb;
+      outline: none;
+    }
 
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            background: #fff;
-            color: #333;
-            outline: none;
-            resize: none;
-            box-sizing: border-box;
-            max-width: 100%;
-        }
+    /* Heading */
+    h2 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      color: #1e293b;
+      text-align: center;
+      user-select: none;
+    }
 
-        input::placeholder, textarea::placeholder {
-            color: #888;
-        }
+    /* Form container */
+    form {
+      background: #ffffff;
+      padding: 35px 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      width: 360px;
+      max-width: 100%;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
 
-        textarea {
-            height: 120px;
-            max-height: 150px;
-            overflow-y: auto;
-        }
+    /* Form groups */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
 
-        /* Submit button */
-        .submit-btn {
-            width: 100%;
-            padding: 12px;
-            background: #8db600;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
-        }
+    /* Labels */
+    label {
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #334155; /* slate-700 */
+      user-select: none;
+    }
 
-        .submit-btn:hover {
-            background: #7a9a01;
-        }
+    /* Inputs */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      padding: 12px 16px;
+      font-size: 16px;
+      border: 2px solid #cbd5e1; /* slate-300 */
+      border-radius: 12px;
+      background-color: #f9fafb;
+      color: #1e293b;
+      transition: border-color 0.3s ease, box-shadow 0.25s ease;
+      outline-offset: 2px;
+      font-family: inherit;
+    }
 
-        /* Back link below form */
-        .back-btn {
-            display: block;
-            margin-top: 15px;
-            text-decoration: none;
-            color: #8db600;
-            font-weight: bold;
-            transition: 0.3s;
-            text-align: center;
-        }
+    input::placeholder {
+      color: #64748b; /* slate-500 */
+      font-style: italic;
+    }
 
-        .back-btn:hover {
-            text-decoration: underline;
-            color: #7a9a01;
-        }
+    input:focus {
+      border-color: #3b82f6; /* blue-500 */
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+      outline: none;
+    }
 
-        /* Top-left back arrow styled as a button */
-        .top-back-arrow {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            text-decoration: none;
-            color: #333;
-            font-size: 28px;
-            font-weight: bold;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background-color: #fff; /* White background */
-            border: 2px solid #8db600; /* Green border */
-            padding: 8px 12px; /* Padding to make it button-like */
-            border-radius: 6px; /* Rounded corners */
-            cursor: pointer; /* Hand cursor on hover */
-        }
+    /* Submit button */
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.7);
+      user-select: none;
+      transition: background 0.4s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    }
 
-        .top-back-arrow:hover {
-            color: #fff; /* White text on hover */
-            background-color: #8db600; /* Green background on hover */
-            border-color: #7a9a01; /* Slightly darker border on hover */
-        }
+    .submit-btn:hover,
+    .submit-btn:focus {
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.9);
+      outline: none;
+      transform: translateY(-2px);
+    }
 
-        /* Home button (kept for consistency, not used here) */
-        .home-btn {
-            background-color: #007bff;
-            color: white;
-            padding: 8px 15px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: 0.3s;
-        }
+    /* Back to login link below form */
+    .back-btn {
+      display: block;
+      margin-top: 28px;
+      text-decoration: none;
+      color: #3b82f6;
+      font-weight: 700;
+      font-size: 16px;
+      text-align: center;
+      user-select: none;
+      transition: color 0.3s ease, text-decoration 0.3s ease;
+    }
 
-        .home-btn:hover {
-            background-color: #0056b3;
-            text-decoration: none;
-        }
-    </style>
+    .back-btn:hover,
+    .back-btn:focus {
+      color: #1e40af;
+      text-decoration: underline;
+      outline: none;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 400px) {
+      form {
+        padding: 28px 22px;
+        width: 100%;
+      }
+
+      h2 {
+        font-size: 2.4rem;
+        margin-bottom: 24px;
+      }
+
+      .submit-btn {
+        font-size: 18px;
+        padding: 12px;
+      }
+
+      .top-back-arrow {
+        font-size: 18px;
+        padding: 8px 12px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Top-left back arrow button -->
-    <a href="{{ url_for('home') }}" class="top-back-arrow">← BACK</a>
+  <!-- Top-left back arrow button -->
+  <a href="{{ url_for('home') }}" class="top-back-arrow">← BACK</a>
 
-    <h2>Create a New Account</h2>
+  <h2>Create a New Account</h2>
 
-    <form method="POST">
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" class="form-control" required>
-        </div>
+  <form method="POST">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" class="form-control" required />
+    </div>
 
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" class="form-control" required>
-        </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" class="form-control" required />
+    </div>
 
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" class="form-control" required>
-        </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" class="form-control" required />
+    </div>
 
-        <button type="submit" class="submit-btn">Sign Up</button>
-    </form>
+    <button type="submit" class="submit-btn">Sign Up</button>
+  </form>
 
-    <!-- Original back link below form -->
-    <a href="{{ url_for('login') }}" class="back-btn">Already have an account? Log in</a>
+  <!-- Back to login link -->
+  <a href="{{ url_for('login') }}" class="back-btn">Already have an account? Log in</a>
 
 </body>
 </html>

@@ -6,153 +6,193 @@
     <title>Login</title>
     <style>
         /* Body styling */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #efffba;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            color: #333;
-            position: relative; /* For absolute positioning of top-left back arrow */
-        }
+        *,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-        /* Heading */
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 40px;
-        }
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #f0f4f8; /* soft light blue-gray background */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: #1e293b; /* dark slate gray for better readability */
+  position: relative;
+  padding: 20px;
+}
 
-        /* Form styling */
-        form {
-            background: #f9f9f9;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 350px;
-            text-align: center;
-            overflow: hidden;
-        }
+/* Top-left back arrow button */
+.top-back-arrow {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #ffffff;
+  border: 2px solid #3b82f6; /* blue-500 */
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 700;
+  font-size: 20px;
+  color: #1e293b;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+  user-select: none;
+}
 
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-            position: relative;
-        }
+.top-back-arrow:hover,
+.top-back-arrow:focus {
+  background-color: #2563eb; /* blue-600 */
+  border-color: #1e40af; /* blue-800 */
+  color: #f9fafb;
+  outline: none;
+}
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: bold;
-        }
+/* Page title */
+h2 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #1e293b;
+  text-align: center;
+  user-select: none;
+}
 
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            background: #fff;
-            color: #333;
-            outline: none;
-            resize: none;
-            box-sizing: border-box;
-            max-width: 100%;
-        }
+/* Form container */
+form {
+  background: #ffffff;
+  padding: 35px 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  width: 360px;
+  max-width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
 
-        input::placeholder, textarea::placeholder {
-            color: #888;
-        }
+/* Form groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
 
-        textarea {
-            height: 120px;
-            max-height: 150px;
-            overflow-y: auto;
-        }
+/* Labels */
+label {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #334155; /* slate-700 */
+  user-select: none;
+}
 
-        /* Submit button */
-        .submit-btn {
-            width: 100%;
-            padding: 12px;
-            background: #8db600;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
-        }
+/* Inputs */
+input[type="text"],
+input[type="password"] {
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 2px solid #cbd5e1; /* slate-300 */
+  border-radius: 12px;
+  background-color: #f9fafb;
+  color: #1e293b;
+  transition: border-color 0.3s ease, box-shadow 0.25s ease;
+  outline-offset: 2px;
+  font-family: inherit;
+}
 
-        .submit-btn:hover {
-            background: #7a9a01;
-        }
+input[type="text"]::placeholder,
+input[type="password"]::placeholder {
+  color: #64748b; /* slate-500 */
+  font-style: italic;
+}
 
-        /* Back link below form (original position) */
-        .back-btn {
-            display: block;
-            margin-top: 15px;
-            text-decoration: none;
-            color: #8db600;
-            font-weight: bold;
-            transition: 0.3s;
-            text-align: center;
-        }
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #3b82f6; /* blue-500 */
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+  outline: none;
+}
 
-        .back-btn:hover {
-            text-decoration: underline;
-            color: #7a9a01;
-        }
+/* Submit button */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.7);
+  user-select: none;
+  transition: background 0.4s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
 
-        /* New back arrow in top-left corner styled as a button */
-        .top-back-arrow {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            text-decoration: none;
-            color: #333;
-            font-size: 28px;
-            font-weight: bold;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background-color: #fff; /* White background */
-            border: 2px solid #8db600; /* Green border */
-            padding: 8px 12px; /* Padding to make it button-like */
-            border-radius: 6px; /* Rounded corners */
-            cursor: pointer; /* Hand cursor on hover */
-        }
+.submit-btn:hover,
+.submit-btn:focus {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.9);
+  outline: none;
+  transform: translateY(-2px);
+}
 
-        .top-back-arrow:hover {
-            color: #fff; /* White text on hover */
-            background-color: #8db600; /* Green background on hover */
-            border-color: #7a9a01; /* Slightly darker border on hover */
-        }
+/* Signup link below form */
+.back-btn {
+  display: block;
+  margin: 28px auto 0;
+  color: #3b82f6;
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
 
-        /* Home button (kept for consistency, not used here) */
-        .home-btn {
-            background-color: #007bff;
-            color: white;
-            padding: 8px 15px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: 0.3s;
-        }
+.back-btn:hover,
+.back-btn:focus {
+  color: #1e40af;
+  text-decoration: underline;
+  outline: none;
+}
 
-        .home-btn:hover {
-            background-color: #0056b3;
-            text-decoration: none;
-        }
+/* Responsive adjustments */
+@media (max-width: 400px) {
+  form {
+    padding: 28px 22px;
+    width: 100%;
+  }
+
+  h2 {
+    font-size: 2.4rem;
+    margin-bottom: 24px;
+  }
+
+  .submit-btn {
+    font-size: 18px;
+    padding: 12px;
+  }
+
+  .top-back-arrow {
+    font-size: 18px;
+    padding: 8px 12px;
+  }
+}
     </style>
 </head>
 <body>
 
     <!-- Updated back arrow in top-left corner styled as a button -->
-    <a href="{{ url_for('home') }}" class="top-back-arrow">← BACK</a>
+    <a href="{{ url_for('newhome') }}" class="top-back-arrow">← BACK</a>
 
     <h2>Login</h2>
 
