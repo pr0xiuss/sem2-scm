@@ -1,176 +1,357 @@
-/* Edit section */
-.edit-section {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #ccc;
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.edit-section h3 {
-    margin-bottom: 15px;
-    color: #333;
+body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(120deg, #f0fdf4 0%, #e6f3fa 100%);
+    color: #1f2a44;
+    line-height: 1.8;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
-.edit-profile-form label {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
+/* Profile Container */
+.profile-container {
+    max-width: 1300px;
+    margin: 3.5rem auto;
+    padding: 0 2rem;
+    animation: fadeIn 1s ease-out;
 }
 
-.edit-profile-form textarea,
-.edit-profile-form input[type="file"] {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1em;
-}
-
-.submit-btn {
-    margin-top: 15px;
-    padding: 10px 20px;
-    font-size: 1em;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.submit-btn:hover {
-    background-color: #3e8e41;
-}
-
-/* Profile container layout */
+/* Profile Header */
 .profile-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 3rem;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3rem;
+    border-left: 8px solid #34d399;
+    animation: slideInLeft 0.7s ease-out;
 }
 
-/* Profile picture styling */
 .profile-pic {
-    width: 100px;
-    height: 100px;
+    width: 180px;
+    height: 180px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #1a535c;
-    margin-right: 20px;
+    border: 6px solid #ecfdf5;
+    cursor: pointer;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
-/* Alternative profile-img (unused) */
-.profile-img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 20px;
+.profile-pic:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(52, 211, 153, 0.5);
 }
 
-/* Info styling */
 .profile-info {
-    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .profile-info h2 {
-    margin: 0;
-    font-size: 1.5em;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 0.75rem;
 }
 
 .profile-info p {
-    margin: 5px 0;
+    font-size: 1.2rem;
+    color: #4b5563;
+    margin: 0.4rem 0;
 }
 
-/* Button styles */
+.profile-info p strong {
+    color: #1f2a44;
+    font-weight: 600;
+}
+
+/* Profile Actions */
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    align-self: center;
+}
+
 .profile-actions a {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
     text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
 }
 
-.profile-actions a:hover {
-    background-color: #0056b3;
+.home-btn {
+    background: #34d399;
+    color: #fff;
 }
 
-/* Posts */
+.home-btn:hover {
+    background: #2dd4bf;
+    transform: translateY(-4px);
+}
+
+.logout-btn {
+    background: #f87171;
+    color: #fff;
+}
+
+.logout-btn:hover {
+    background: #ef4444;
+    transform: translateY(-4px);
+}
+
+.edit-btn {
+    background: #6366f1;
+    color: #fff;
+}
+
+.edit-btn:hover {
+    background: #4f46e5;
+    transform: translateY(-4px);
+}
+
+/* Posts Section */
+h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 3rem 0 2rem;
+    animation: fadeIn 1.2s ease-out;
+}
+
 .post {
-    margin-bottom: 20px;
+    background: #fff;
+    border-radius: 50px;
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    transition: transform 0.4s ease;
+    animation: slideInUp 0.8s ease-out;
+}
+
+.post:hover {
+    transform: translateY(-8px);
 }
 
 .post-title {
-    font-size: 1.2em;
-    font-weight: bold;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #34d399;
+    margin-bottom: 1rem;
 }
 
 .post-preview {
-    color: #555;
+    font-size: 1.1rem;
+    color: #4b5563;
+    margin-bottom: 1.2rem;
 }
 
 .post-date {
-    font-size: 0.9em;
-    color: #888;
+    font-size: 1rem;
+    color: #6b7280;
+    margin-bottom: 1rem;
 }
 
+
 .read-more {
-    color: #edf0f3;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
     text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
 }
 
 .read-more:hover {
+    color: #fff;
     text-decoration: underline;
 }
 
 .no-posts {
-    font-size: 1.2em;
-    color: #888;
+    font-size: 1.2rem;
+    color: #4b5563;
+    text-align: center;
+    margin: 3.5rem 0;
+    animation: fadeIn 1.2s ease-out;
 }
 
+/* Create Post Button */
 .profile-create {
-    margin-top: 20px;
+    text-align: center;
+    margin-top: 2.5rem;
 }
 
-/* Instagram-style modal for profile picture */
+.create-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    background: #34d399;
+    color: #fff;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(52, 211, 153, 0.4);
+    transition: all 0.3s ease;
+}
+
+.create-btn:hover {
+    background: #2dd4bf;
+    transform: translateY(-4px);
+}
+
+/* Modal Styles */
 .insta-modal {
     display: none;
     position: fixed;
-    z-index: 10000;
-    left: 0;
     top: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0,0,0,0.9);
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
     align-items: center;
     justify-content: center;
+    z-index: 3000;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.insta-modal.active {
+    display: flex;
+    opacity: 1;
 }
 
 .insta-modal-img {
-    max-width: 300px;
-    max-height: 300px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 16px;
+    object-fit: contain;
+    transform: scale(0.7);
+    transition: transform 0.5s ease;
+}
+
+.insta-modal.active .insta-modal-img {
+    transform: scale(1);
 }
 
 .close-modal {
     position: absolute;
     top: 30px;
     right: 40px;
-    font-size: 40px;
-    color: white;
+    color: #ecfdf5;
+    font-size: 3rem;
+    font-weight: 200;
     cursor: pointer;
-    font-weight: bold;
-    z-index: 10001;
+    transition: color 0.3s ease, transform 0.3s ease;
 }
 
-/* Optional: prevent scrolling when modal is open */
-body.no-scroll {
+.close-modal:hover {
+    color: #34d399;
+    transform: scale(1.2);
+}
+
+.no-scroll {
     overflow: hidden;
 }
 
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+    from { transform: translateX(-60px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInUp {
+    from { transform: translateY(60px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .profile-container {
+        max-width: 90%;
+    }
+
+    .profile-header {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2rem;
+    }
+
+    .profile-pic {
+        margin: 0 auto;
+    }
+
+    .profile-actions {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .profile-actions a {
+        padding: 0.9rem 1.8rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .profile-container {
+        padding: 0 1.5rem;
+        margin: 2rem auto;
+    }
+
+    .profile-pic {
+        width: 140px;
+        height: 140px;
+    }
+
+    .profile-info h2 {
+        font-size: 2rem;
+    }
+
+    .profile-info p {
+        font-size: 1.1rem;
+    }
+
+    .post-title {
+        font-size: 1.4rem;
+    }
+
+    .post-preview {
+        font-size: 1rem;
+    }
+
+    .create-btn {
+        padding: 0.9rem 2rem;
+        font-size: 1.1rem;
+    }
+
+    .close-modal {
+        top: 20px;
+        right: 25px;
+        font-size: 2.5rem;
+    }
+}
